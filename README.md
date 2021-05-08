@@ -1,2 +1,2 @@
 # CakeFinder
-CakeFinder ChatTriggers Module
+This module creates and modifies a resource pack the retextures cakes by year based on a list created by the user. OPTIFINE is required for the resource pack to work, and it must be put in higher priority than other texture packs affecting cakes. To see a guide in-game fun `/cakefinder`. If you need support or find bugs go to the SkyblockCommands discord server: [discord.gg/zyuMB7T](discord.gg/zyuMB7T)
