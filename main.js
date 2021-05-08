@@ -3,11 +3,12 @@
 
 import FileUtilities from "../FileUtilities/main";
 
+
 const FP = "./config/ChatTriggers/modules/CakeFinder/"
 const TPFP = "./resourcepacks/CakeFinder/";
 const TPFP2 = TPFP + "assets/minecraft/mcpatcher/cit/"
 let cakes = String(FileLib.read(FP + "cakes.txt")).split(" ");
-const version = "1.0.1";
+const version = "1.0.2";
 const ChatStart = "&3[&d&lCakeFinder&3]&r ";
 const ChatLine = "&3&m-----------------------------------------------------";
 const ChatLineName = "&3&m---------------------&r &d&lCakeFinder&r &3&m--------------------";
@@ -18,13 +19,13 @@ const help4 = new Message("           ", new TextComponent("&d<= Last Page").set
 
 function updateAlert() {
 //    if (FileUtilities.exists(FP + "version.txt") === false) {
-        FileUtilities.copyFile(FP + "cake_needed_default.png", FP + "cake_needed.png");
+        FileUtilities.copyFile(FP + "cake_needed_default.png", FP + "cake_needed.png", true);
         FileUtilities.newDirectory(TPFP2);
         FileLib.write(FP + "version.txt", version);
         ChatLib.chat(ChatStart + "&eCakeFinder has updated to " + version);
         setTimeout(() => {
-            FileUtilities.copyFile(FP + "pack.mcmeta", TPFP + "pack.mcmeta");
-            FileUtilities.copyFile(FP + "pack.png", TPFP + "pack.png");
+            FileUtilities.copyFile(FP + "pack.mcmeta", TPFP + "pack.mcmeta", true);
+            FileUtilities.copyFile(FP + "pack.png", TPFP + "pack.png", true);
         }, 2000);
 //    } else if (FileLib.read(FP + "version.txt") !== version) {
 //        FileLib.write(FP + "version.txt", version);
@@ -103,8 +104,8 @@ register("command", (arg1, ...args) => {
     FileLib.write(FP + "cakes.txt", cakes.join(" "));
     FileLib.write(FP + "cake_needed.properties", "type=item\nitems=minecraft:cake\nnbt.display.Name=ipattern:*new year cake*\nnbt.display.Lore.*=iregex:.*the (" + cakes.join("|") + ")(st|nd|rd|th).*");
 
-    FileUtilities.copyFile(FP + "cake_needed.properties", TPFP2 + "cake_needed.properties");
-    FileUtilities.copyFile(FP + "cake_needed.png", TPFP2 + "cake_needed.png");
+    FileUtilities.copyFile(FP + "cake_needed.properties", TPFP2 + "cake_needed.properties", true);
+    FileUtilities.copyFile(FP + "cake_needed.png", TPFP2 + "cake_needed.png", true);
 
 }).setName("cakefinder");
 
