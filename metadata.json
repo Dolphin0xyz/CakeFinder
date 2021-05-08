@@ -1,0 +1,10 @@
+{
+    "name": "CakeFinder",
+    "creator": "Dolphin0xyz",
+    "version": "1.0.1",
+    "description": "This module highlights new years cakes in skyblock.",
+    "entry": "main.js",
+    "requires": ["FileUtilities"],
+    "helpMessage": "&3[&d&lCakeFinder&3]&r &eRun &6/cakefinder&e for help.",
+    "$schema": "../CTAutocomplete/schema.json"
+  }
