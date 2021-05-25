@@ -8,7 +8,7 @@ const FP = "./config/ChatTriggers/modules/CakeFinder/"
 const TPFP = "./resourcepacks/CakeFinder/";
 const TPFP2 = TPFP + "assets/minecraft/mcpatcher/cit/"
 let cakes = String(FileLib.read(FP + "cakes.txt")).split(" ");
-const version = "1.0.3";
+const version = "1.1.0";
 const ChatStart = "&3[&d&lCakeFinder&3]&r ";
 const ChatLine = "&3&m-----------------------------------------------------";
 const ChatLineName = "&3&m---------------------&r &d&lCakeFinder&r &3&m--------------------";
@@ -16,24 +16,57 @@ const help1 = new Message("                                                  ", 
 const help2 = new Message("           ", new TextComponent("&d<= Last Page").setClick("run_command", "/cakefinder help1"), "                       " ,new TextComponent("&dNext Page =>").setClick("run_command", "/cakefinder help3"));
 const help3 = new Message("           ", new TextComponent("&d<= Last Page").setClick("run_command", "/cakefinder help2"), "                       " ,new TextComponent("&dNext Page =>").setClick("run_command", "/cakefinder help4"));
 const help4 = new Message("           ", new TextComponent("&d<= Last Page").setClick("run_command", "/cakefinder help3"));
+const updateMSG = ChatStart + "&eCakeFinder has updated to " + version + ". &6Changelog: &eWhen a new cake is released a chat message appears with the option to add it to your list.";
 
 function updateAlert() {
     if (!FileUtilities.exists(FP + "version.txt") || !FileUtilities.exists(TPFP + "pack.png")) {
         FileUtilities.copyFile(FP + "cake_needed_default.png", FP + "cake_needed.png", true);
         FileUtilities.newDirectory(TPFP2);
         FileLib.write(FP + "version.txt", version);
-        ChatLib.chat(ChatStart + "&eCakeFinder has updated to " + version);
+        ChatLib.chat(updateMSG);
         setTimeout(() => {
             FileUtilities.copyFile(FP + "pack.mcmeta", TPFP + "pack.mcmeta", true);
             FileUtilities.copyFile(FP + "pack.png", TPFP + "pack.png", true);
         }, 2000);
     } else if (FileLib.read(FP + "version.txt") !== version) {
         FileLib.write(FP + "version.txt", version);
-        ChatLib.chat(ChatStart + "&eCakeFinder has updated to " + version + ".");
+        ChatLib.chat(updateMSG);
     }
 }
 
 updateAlert();
+
+register("step", () => {
+    cakeAlert();
+}).setDelay(600);
+
+register("chat", () => {
+    cakeAlert();
+}).setCriteria("Go there and talk to the Baker to get your New Year's Cake!");
+
+function cakeAlert() {
+    const lastYear = Number(FileLib.read(FP + "year.txt"));
+    const year = sbYear();
+    if (year - lastYear === 0) return;
+    const years  = year - lastYear;
+    const tcs = [ChatStart + "&eThese new cakes have been baked whilst you were gone. Click the years you want added to your list:"];
+    let i = 0;
+    while (i < years) {
+        let m = lastYear + i;
+        let punc;
+        if (i === years) {
+            punc = "&e.";
+        } else {
+            punc = "&e,";
+        }
+        tcs.push(new TextComponent(" &6" + m + punc).setClick("run_command", "/cakefinder add " + m).setHoverValue("&eClick this year to add it to your cake list."));
+        i++;
+    }
+    const cakeMSG = new Message(tcs);
+    print(cakeMSG);
+    ChatLib.chat(cakeMSG);
+    FileLib.write(FP + "year.txt", year);
+}
 
 register("command", (arg1, ...args) => {
 
@@ -113,7 +146,12 @@ const year1 = 1560718500000;
 const sbYearTime = 446400000;
 
 function sbYear() {
-  const time = new Date().getTime();
-  let years = time - year1;
-  return ((years - (years % sbYearTime)) / sbYearTime) + 2;
+    const time = new Date().getTime();
+    const years = time - year1;
+    return ((years - (years % sbYearTime)) / sbYearTime) + 2;
+}
+
+function nextYear() {
+    const year = sbYear();
+    return year1 + (sbYearTime * (year - 1));
 }
